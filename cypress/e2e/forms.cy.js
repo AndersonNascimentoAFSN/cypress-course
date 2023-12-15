@@ -46,4 +46,17 @@ describe('form tests page', () => {
     cy.wait(3000)
     cy.getDataTest('subscribe-message').should('not.exist')
   })
+
+  it('Test fail subscribe form', () => {
+    const invalidMessageText = 'fail!'
+
+    cy.getDataTest('subscribe-message').should('not.exist')
+    cy.getDataTest('subscribe-button').click()
+
+    cy.getDataTest('subscribe-message').should('exist')
+    cy.getDataTest('subscribe-message').should('have.text', invalidMessageText)
+
+    cy.wait(3000)
+    cy.getDataTest('subscribe-message').should('not.exist')
+  })
 })
