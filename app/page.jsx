@@ -42,7 +42,7 @@ const reasonsCypressIsGreat = [
 export default function Home() {
   return (
     <main className={styles.main}>
-        <h1 className={styles.header}>Why Cypress?</h1>
+        <h1 data-test="home-header" className={styles.header}>Why Cypress?</h1>
         <ul>
           <Accordion items={reasonsCypressIsGreat} />
         </ul>
