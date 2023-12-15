@@ -31,8 +31,10 @@ describe('form tests page', () => {
     const emailInvalid = 'testemailcom'
     const emailInvalidText = `Invalid email: ${emailInvalid}!`
 
-    cy.getDataTest('subscribe-input').find('input').type(emailInvalid)
-    cy.getDataTest('subscribe-input').find('input').should('have.value', emailInvalid)
+    cy.getDataTest('subscribe-input').find('input').as('subscribe-input')
+
+    cy.get('@subscribe-input').type(emailInvalid)
+    cy.get('@subscribe-input').should('have.value', emailInvalid)
 
     cy.getDataTest('subscribe-message').should('not.exist')
 
@@ -40,5 +42,8 @@ describe('form tests page', () => {
 
     cy.getDataTest('subscribe-message').should('exist')
     cy.getDataTest('subscribe-message').should('have.text', emailInvalidText)
+
+    cy.wait(3000)
+    cy.getDataTest('subscribe-message').should('not.exist')
   })
 })
