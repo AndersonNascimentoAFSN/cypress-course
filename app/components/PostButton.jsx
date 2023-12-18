@@ -2,19 +2,23 @@
 
 import { Button } from "@mui/material"
 
-export default function PostButton(){
+export default function PostButton() {
 
-    function handleClick(){
-        fetch('http://localhost:3000/examples', {method: 'POST'}).then((data) => {
-            console.log({data})
-        }).catch(() => {
-            console.log('An error occured')
-        })
-    }
+  async function handleClick() {
+    // await fetch('http://localhost:3000/examples', { method: 'POST' }).then((res) => {
+    //   // console.log({data})
+    //   res.json().then((data) => console.log({ data }))
+    // }).catch(() => {
+    //   console.log('An error occured')
+    // })
+    const res = await fetch('http://localhost:3000/examples', { method: 'POST' })
+    const data = await res.json()
+    console.log({ data })
+  }
 
-    return (
-        <Button onClick={handleClick}>
-            Post Data
-        </Button>
-    )
+  return (
+    <Button data-test='post-button' onClick={handleClick}>
+      Post Data
+    </Button>
+  )
 }

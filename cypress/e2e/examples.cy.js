@@ -1,9 +1,7 @@
 describe('Varios examples', () => {
-  before(() => {
-    cy.visit('/')
-  })
-
   it('Navbar multi-page testing', () => {
+    cy.visit('/')
+
     cy.get('.nav-bar>a').each(($el, index, $list) => {
       const pathName = `/${$list[index].href.split('/')[3]}`
       if (pathName === '/') return
@@ -50,5 +48,24 @@ describe('Varios examples', () => {
 
     // cy.getDataTest('nav-item-best-practices').click()
     // cy.location("pathname").should("eq", "/best-practices")
+  })
+
+  it('intercepts', () => {
+    cy.visit('/examples')
+
+    cy.intercept('POST', 'http://localhost:3000/examples', (req) => {
+      req.reply({
+        // body: {
+        //   message: 'successfully intercepted request'
+        // },
+        fixture: 'example.json', // body vindo de um arquivo .json
+        statusCode: 201,
+      })
+    }
+    ).as('post-examples')
+
+    // cy.wait('@post-examples')
+
+    cy.getDataTest('post-button').click()
   })
 })
