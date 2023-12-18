@@ -68,4 +68,94 @@ describe('Varios examples', () => {
 
     cy.getDataTest('post-button').click()
   })
+
+  describe(('grudges'), () => {
+    describe.only('grudge title', () => {
+      beforeEach(() => {
+        cy.visit('/examples')
+      })
+
+      it('should show title as "Add Some Grudges" when grudge list is empty', () => {
+        cy.getDataTest('grudge-list-title').as('grudge-list-title')
+        cy.get('@grudge-list-title').should('contain.text', 'Add Some Grudges')
+      })
+
+      it('should show title as "Grudges" when grudge list is not empty', () => {
+        cy.getDataTest('grudge-list-title').as('grudge-list-title')
+        cy.get('[data-test="grudge-input"]').within(() => {
+          cy.get('input')
+        }).as('grudge-input')
+        cy.getDataTest('add-grudge-button').as('add-grudge-button')
+
+        cy.get('@grudge-input').type('some grudge')
+        cy.get('@add-grudge-button').click()
+        cy.get('@grudge-list-title').should('have.text', 'Grudges')
+      })
+    })
+
+    it('grudges', () => {
+      cy.visit('/examples')
+      cy.contains(/Add Some Grudges/i)
+
+      // cy.get('[data-test="grudge-input"]').find('input').as('grudge-input')
+      // cy.get('@grudge-input').type('John')
+
+      // cy.get('[data-test="grudge-input"]').within(() => {
+      //   cy.get('input').type('some grudge')
+      // }).as('grudge-input')
+
+      cy.get('[data-test="grudge-input"]').within(() => {
+        cy.get('input')
+      }).as('grudge-input')
+      cy.get('@grudge-input').type('some grudge')
+      cy.getDataTest('grudge-list').as('grudge-list')
+      cy.getDataTest('add-grudge-button').as('add-grudge-button')
+
+      cy.get('@grudge-list').within(() => {
+        cy.get('li').should('have.length', 0)
+      })
+
+      cy.getDataTest('remove-all-grudge-item-button').should('not.exist')
+
+
+      cy.get('@add-grudge-button').click()
+
+      cy.get('@grudge-list').should('have.length', 1)
+      cy.get('@grudge-list').its('0').should('contain.text', 'some grudge')
+
+
+      cy.get('@grudge-input').type('some grudge 2')
+      cy.get('@add-grudge-button').click()
+      cy.get('@grudge-list').within(() => {
+        cy.get('li').should('have.length', 2)
+      }) // com within, o cypress vai procurar dentro do elemento que foi passado como parametro, funciona melhor que passar o its sem ser dentro do within
+      cy.get('@grudge-list').within(() => {
+        cy.get('li').its('1').should('contain.text', 'some grudge 2')
+      }) // com within, o cypress vai procur dentro do elemento que foi passado como parametro, funciona melhor que passar o its sem ser dentro do within
+
+      // cy.getDataTest('remove-grudge-item-button').as('remove-grudge-item-button')
+      // cy.get('@remove-grudge-item-button').first().click()
+
+      cy.get('@grudge-list').within(() => {
+        cy.get('li').its('0').within(() => {
+          cy.get('button').click()
+        })
+      })
+
+      cy.get('@grudge-list').within(() => {
+        cy.get('li').should('have.length', 1)
+        cy.get('li').its('1').should('not.exist')
+      })
+
+      cy.getDataTest('remove-all-grudge-item-button').as('remove-all-grudge-item-button')
+
+      cy.getDataTest('remove-all-grudge-item-button').should('exist')
+
+      cy.get('@remove-all-grudge-item-button').click()
+
+      cy.get('@grudge-list').within(() => {
+        cy.get('li').should('have.length', 0)
+      })
+    })
+  })
 })
