@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function ItemsAccordion({items}) {
   return (
-    <div style={{maxWidth: '70vw', minWidth: '50vw'}}>
+    <div data-test="accordion-wrapper" style={{maxWidth: '70vw', minWidth: '50vw'}}>
         {
             items.map((item) => {
                 return (
@@ -15,8 +15,9 @@ export default function ItemsAccordion({items}) {
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       id="panel1a-header"
+                      data-test={`accordion-item-summary-${item.id}`}
                     >
-                      <Typography data-test={`accordion-item-summary-${item.id}`}>{item.summary}</Typography>
+                      <Typography>{item.summary}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography data-test={`accordion-item-details-${item.id}`}>
